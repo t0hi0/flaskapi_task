@@ -5,7 +5,6 @@ from flask import request
 
 app = flask.Flask(__name__)
 app.config["DEBUG"] = True
-results = []
 
 
 @app.route("/", methods=["GET"])
@@ -18,14 +17,16 @@ def home():
 
 @app.route("/add", methods=["GET"])
 def add_nums():
+    # Get file path from request and try open file
     file_path = request.args["file"]
     try:
         with open(file_path) as f:
             file = json.load(f)
     except FileNotFoundError as e:
-        return dict(error=f"File with path {file_path} not found", exception=str(e),
-                    message="Review file path and try again"), 400
+        return dict(error="File path Error", exception=str(e),
+                    message="Review json file path and try again"), 400
     try:
+        # Try calculate a sum of numbers and return result or error msg
         result = sum(file['numbers'])
         response = {"Sum of numbers is": result}
         return response, 200
