@@ -9,6 +9,7 @@ Clone the repo from GitHub using
 
 Create a Python3 virtual env and activate
 > python3 -m venv /path/to/venv
+
 > path/to/venv$ Scripts/activate.bat
 
 Go to 'app' directory. Install required packages
@@ -24,6 +25,7 @@ Performing sum a json file '{"numbers": [1,2,3,4]}':
 Deploy the API using the Dockerfile within this project
 
 > path/to/flaskapi_task/app$ docker build -t flaskapi_task .
+
 > path/to/flaskapi_task/app$ docker run -d -p 5000:5000 flaskapi_task
 
 Deploy the API using the Docker compose 
@@ -32,8 +34,10 @@ Deploy the API using the Docker compose
 ## Test
 After build Dockerfile you can test API (test.json) with script.sh in main directory. Grant privileges for script and run: 
 > path/to/flaskapi_task$ chmod +x script.sh
+
 > path/to/flaskapi_task$ ./script.sh
 
 Also you can test API (test.json) with script_compose.sh in 'app' directory. Grant privileges for script and run: 
 > path/to/flaskapi_task/app$ chmod +x script_compose.sh
+
 > path/to/flaskapi_task/app$ ./script_compose.sh
