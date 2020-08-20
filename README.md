@@ -1,8 +1,8 @@
-#Flask API test task
+# Flask API test task
 
 This test project contains API for get json file with numbers and return sum of numbers as json
 
-##Development
+## Development
 
 Clone the repo from GitHub using
 > git clone https://github.com/t0hi0/flaskapi_task.git
