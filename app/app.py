@@ -1,44 +1,42 @@
-import json
+from flask import Flask, request
 
-import flask
-from flask import request
 
-app = flask.Flask(__name__)
+app = Flask(__name__)
 app.config["DEBUG"] = True
+hello_message = dict(response="It's API for get json file and calculate sum of numbers. "
+                              "Try send json file {'numbers': [1,2,3,4]} to /add.")
 
 
-@app.route("/", methods=["GET"])
+@app.route("/", methods=["GET", "POST"])
 def home():
     # Return home page
-    return dict(response="Hello. It's flask API for get json file and calculate sum of numbers. "
-                         "Go to /add and try this: /add?file=/full/path/to/file.json. Json file structure: "
-                         "{'numbers': [1,2,3,4]}"), 200
+    return hello_message, 200
 
 
-@app.route("/add", methods=["GET"])
+@app.route("/add", methods=["GET", "POST"])
 def add_nums():
-    # Get file path from request and try open file
-    file_path = request.args["file"]
-    try:
-        with open(file_path) as f:
-            file = json.load(f)
-    except FileNotFoundError as e:
-        return dict(error="File path Error", exception=str(e),
-                    message="Review json file path and try again"), 400
-    try:
-        # Try calculate a sum of numbers and return result or error msg
-        result = sum(file['numbers'])
-        response = {"Sum of numbers is": result}
-        return response, 200
-    except Exception as e:
-        return dict(error="Calculation Error", exception=str(e),
-                    message="Review operation parameters, json file and try again"), 400
+    if request.method == 'POST':
+        # Check for json data in request
+        if request.data:
+            # Get json data from request
+            data = request.json
+            try:
+                # Try calculate a sum of numbers and return result or error msg
+                result = sum(data['numbers'])
+                response = {"Sum of numbers is": result}
+                return response, 200
+            except Exception as e:
+                return dict(error="Calculation Error", exception=str(e),
+                            message="Review operation parameters, json file and try again"), 400
+        else:
+            return dict(error="Check json file name or file existence and try again"), 400
+    else:
+        return hello_message, 405
 
 
 @app.errorhandler(404)
 def page_not_found(error):
-    return dict(response="Page does not exist. Go to /add and try this: "
-                         "/add?file=/full/path/to/file.json"), 404
+    return dict(response="Page does not exist. Try send json file to /add"), 404
 
 
 if __name__ == "__main__":
